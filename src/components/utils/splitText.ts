@@ -11,24 +11,46 @@ gsap.registerPlugin(ScrollTrigger, SplitText);
 
 export default function setSplitText() {
   ScrollTrigger.config({ ignoreMobileResize: true });
-  if (window.innerWidth < 900) return;
+
   const paras: NodeListOf<ParaElement> = document.querySelectorAll(".para");
   const titles: NodeListOf<ParaElement> = document.querySelectorAll(".title");
+
+  // Always clean up previous text splits and animations before reapplying
+  paras.forEach((para: ParaElement) => {
+    para.classList.add("visible");
+    if (para.anim) {
+      para.anim.progress(1).kill();
+    }
+    if (para.split) {
+      para.split.revert();
+    }
+    // Also explicitly make sure text is visible
+    gsap.set(para, { autoAlpha: 1 });
+  });
+
+  titles.forEach((title: ParaElement) => {
+    if (title.anim) {
+      title.anim.progress(1).kill();
+    }
+    if (title.split) {
+      title.split.revert();
+    }
+    gsap.set(title, { autoAlpha: 1 });
+  });
+
+  if (window.innerWidth < 900) return;
 
   const TriggerStart = window.innerWidth <= 1024 ? "top 60%" : "20% 60%";
   const ToggleAction = "play pause resume reverse";
 
   paras.forEach((para: ParaElement) => {
-    para.classList.add("visible");
-    if (para.anim) {
-      para.anim.progress(1).kill();
-      para.split?.revert();
-    }
-
     para.split = new SplitText(para, {
       type: "lines,words",
       linesClass: "split-line",
     });
+
+    // Make words invisible before animation
+    gsap.set(para.split.words, { autoAlpha: 0 });
 
     para.anim = gsap.fromTo(
       para.split.words,
@@ -47,15 +69,15 @@ export default function setSplitText() {
       }
     );
   });
+
   titles.forEach((title: ParaElement) => {
-    if (title.anim) {
-      title.anim.progress(1).kill();
-      title.split?.revert();
-    }
     title.split = new SplitText(title, {
       type: "chars,lines",
       linesClass: "split-line",
     });
+
+    gsap.set(title.split.chars, { autoAlpha: 0 });
+
     title.anim = gsap.fromTo(
       title.split.chars,
       { autoAlpha: 0, y: 80, rotate: 10 },
@@ -74,6 +96,5 @@ export default function setSplitText() {
       }
     );
   });
-
-  ScrollTrigger.addEventListener("refresh", () => setSplitText());
 }
+

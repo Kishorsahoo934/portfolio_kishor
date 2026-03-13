@@ -133,7 +133,7 @@ const TechStack = () => {
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    const section = document.getElementById("work");
+    const section = document.getElementById("techstack");
     if (!section) return;
 
     const observer = new IntersectionObserver(
@@ -171,7 +171,7 @@ const TechStack = () => {
   }, []);
 
   return (
-    <div className="techstack">
+    <div className="techstack" id="techstack">
       <h2> My Techstack</h2>
 
       <Canvas
