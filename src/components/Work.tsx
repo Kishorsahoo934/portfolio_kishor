@@ -12,6 +12,7 @@ const projects = [
     category: "AI/ML Application",
     tools: "Python, TensorFlow, Data Science",
     image: prithivilokImg,
+    link: "https://prithvilok-test.onrender.com"
   },
   {
     title: "Cosmicwatch",
