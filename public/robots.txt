@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.kishor-kumar-sahoo-portfoio.me/sitemap.xml
